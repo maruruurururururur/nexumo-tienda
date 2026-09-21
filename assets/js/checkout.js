@@ -61,6 +61,7 @@ async function payFree() {
 }
 
 function initPayPalButtons() {
+  if (!document.getElementById('paypal-buttons')) return;
   const cfg = NEXUMO_CONFIG?.payments?.paypal;
   if (!cfg?.enabled || !cfg?.clientId) return;
   if (typeof paypal === 'undefined') return;
