@@ -196,7 +196,18 @@
 <script src="assets/js/main.js"></script>
 <script>
 
-(function(){try{ fetch((typeof NEXUMO_CONFIG!=='undefined'&&NEXUMO_CONFIG.apiBaseUrl||'')+'/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page:location.pathname})}).catch(()=>{}); }catch(e){}})();
+(function(){try{
+  var url=(typeof NEXUMO_CONFIG!=='undefined'&&NEXUMO_CONFIG.apiBaseUrl||'')+'/api/track';
+  var data=JSON.stringify({page:location.pathname});
+  function send(retry){
+    fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:data,keepalive:true}).catch(function(){
+      if(retry) setTimeout(function(){ send(false); },3000);
+    });
+  }
+  var done=false;
+  try{ if(navigator.sendBeacon) done=navigator.sendBeacon(url,new Blob([data],{type:'application/json'})); }catch(e){}
+  if(!done) send(true);
+}catch(e){}})();
 
 function submitContact(){
   const name=document.getElementById('c-name').value.trim();
