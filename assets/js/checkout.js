@@ -82,25 +82,37 @@ function initPayPalButtons() {
           body: JSON.stringify({ items }),
         });
       } catch (e) {
-        toast('No se pudo conectar con el servidor de pagos');
+        toast('Servidor de pagos no disponible. Prueba con Bizum / Transferencia.');
         throw e;
       }
-      const json = await res.json();
+      let json = null;
+      try {
+        json = await res.json();
+      } catch (e) {
+        toast('Servidor de pagos no disponible. Prueba con Bizum / Transferencia.');
+        throw new Error('Pagos no disponibles');
+      }
       if (!json.id) {
-        toast('Error: ' + (json.error || 'No se pudo crear el pedido'));
-        throw new Error(json.error || 'No se pudo crear el pedido');
+        toast('No se pudo crear el pedido. Inténtalo de nuevo o usa Bizum / Transferencia.');
+        throw new Error('No se pudo crear el pedido');
       }
       return json.id;
     },
     onApprove: async (data, actions) => {
-      const res = await fetch(NEXUMO_CONFIG.apiBaseUrl + '/api/paypal/capture-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: data.orderID, email: getEmail(), items: cartItems() }),
-      });
-      const json = await res.json();
+      let json = null;
+      try {
+        const res = await fetch(NEXUMO_CONFIG.apiBaseUrl + '/api/paypal/capture-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: data.orderID, email: getEmail(), items: cartItems() }),
+        });
+        json = await res.json();
+      } catch (e) {
+        toast('No se pudo confirmar el pago. Escríbenos por Discord con tu número de pedido.');
+        return;
+      }
       if (!json.token) {
-        toast('Error: ' + (json.error || 'No se pudo confirmar el pago'));
+        toast('No se pudo confirmar el pago. Escríbenos por Discord con tu número de pedido.');
         return;
       }
       localStorage.removeItem('nexumo_cart');
@@ -108,11 +120,9 @@ function initPayPalButtons() {
     },
     onCancel: () => { window.location.href = 'pago-cancelado.html'; },
     onError: (err) => {
-      console.error('PAYPAL_ERROR', err);
-      const msg = (err && (err.message || err.reason || err.details)) ? (err.message || err.reason || err.details) : 'error desconocido';
       const log = document.getElementById('paypalDebug');
-      if (log) { log.style.display = 'block'; log.textContent = 'Error PayPal: ' + JSON.stringify(msg); }
-      toast('Error con PayPal. Pega el mensaje de abajo.');
+      if (log) { log.style.display = 'block'; log.textContent = 'Pago no disponible ahora mismo. Prueba con Bizum / Transferencia o inténtalo más tarde.'; }
+      toast('Pago no disponible ahora mismo.');
     },
   }).render('#paypal-buttons');
 }

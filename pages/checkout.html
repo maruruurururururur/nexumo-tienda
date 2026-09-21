@@ -156,12 +156,12 @@ renderCheckout();
 (function(){
   const el = document.getElementById('apiDiagVal');
   const url = (NEXUMO_CONFIG.apiBaseUrl || '') + '/api/health';
-  fetch(url).then(r=>r.json()).then(j=>{
-    el.textContent = 'OK — servidor accesible ✔';
+  fetch(url).then(r=>{ if(!r.ok) throw new Error('no disponible'); return r.json(); }).then(j=>{
+    el.textContent = 'Pagos online activos ✔';
     el.style.color = '#22c55e';
   }).catch(e=>{
-    el.textContent = 'ERROR ✘ (' + (e && e.message ? e.message : 'no responde') + '). Página en: ' + window.location.href;
-    el.style.color = '#ff0f0f';
+    el.textContent = 'Pagos online en mantenimiento — puedes pedir por Bizum / Transferencia';
+    el.style.color = '#f59e0b';
   });
 })();
 </script>
