@@ -196,7 +196,7 @@
 <script src="assets/js/main.js"></script>
 <script>
 
-(function(){try{ if(sessionStorage.getItem('nexumo_tracked'))return; fetch((typeof NEXUMO_CONFIG!=='undefined'&&NEXUMO_CONFIG.apiBaseUrl||'')+'/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page:location.pathname})}).catch(()=>{}); sessionStorage.setItem('nexumo_tracked','1'); }catch(e){}})();
+(function(){try{ fetch((typeof NEXUMO_CONFIG!=='undefined'&&NEXUMO_CONFIG.apiBaseUrl||'')+'/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page:location.pathname})}).catch(()=>{}); }catch(e){}})();
 
 function submitContact(){
   const name=document.getElementById('c-name').value.trim();
