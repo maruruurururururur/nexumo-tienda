@@ -1,0 +1,7 @@
+server/.env
+server/data/
+*.log
+server/node_modules/
+factura-demo.pdf
+.DS_Store
+Thumbs.db

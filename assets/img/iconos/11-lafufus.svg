@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 120 120">
+  <defs>
+    <filter id="glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff0f0f" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+  <!-- glow -->
+  <rect x="15" y="15" width="90" height="90" rx="18" fill="none" stroke="#ff0f0f" stroke-opacity="0.3" stroke-width="12" filter="url(#glow)"/>
+  <!-- cuadrado negro -->
+  <rect x="15" y="15" width="90" height="90" rx="18" fill="rgba(18,18,18,1)" stroke="rgba(255,255,255,0.09)" stroke-width="1.5"/>
+  <!-- icono centrado -->
+  <text x="60" y="68" text-anchor="middle" font-size="38" fill="white">🤖</text>
+</svg>
