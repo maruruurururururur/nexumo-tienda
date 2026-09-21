@@ -4,6 +4,15 @@ try {
   const saved = localStorage.getItem('nexumo_cart');
   if (saved) cart = JSON.parse(saved);
 } catch(e){}
+if(!Array.isArray(cart)) cart = [];
+cart = cart
+  .map(c => {
+    const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(x => x.id === Number(c.id)) : null;
+    if(!p) return null;
+    const qty = Math.min(99, Math.max(1, parseInt(c.qty) || 1));
+    return { id: p.id, name: p.name, price: p.price, qty };
+  })
+  .filter(Boolean);
 
 function saveCart(){ localStorage.setItem('nexumo_cart', JSON.stringify(cart)); }
 
@@ -30,7 +39,7 @@ function renderGrid(list){
           </div>
           <div class="actions">
             <button class="btn-cart" onclick="addToCart(${p.id})" aria-label="Anadir"><i data-lucide="shopping-cart" style="width:16px;height:16px"></i></button>
-            <button class="btn-get" onclick="addToCart(${p.id});openCart()">OBTENER</button>
+            <button class="btn-get" onclick="buyNow(${p.id})">OBTENER</button>
           </div>
         </div>
       </article>
@@ -68,7 +77,7 @@ function addToCart(id){
   if(ex) ex.qty++; else cart.push({id:p.id,name:p.name,price:p.price,qty:1});
   saveCart(); updateCart(); toast('Añadido: '+p.name);
 }
-function cartTotal(){ return cart.reduce((s,c)=>s+c.price*c.qty,0); }
+function cartTotal(){ return cart.reduce((s,c)=>(Number(c.price)||0)*(parseInt(c.qty)||0)+s,0); }
 function updateCart(){
   const cc = document.getElementById('cartCount');
   if(cc) cc.textContent = cart.reduce((s,c)=>s+c.qty,0);
@@ -93,8 +102,17 @@ function updateCart(){
 }
 function chgQty(id,d){const it=cart.find(c=>c.id===id);if(!it)return;it.qty+=d;if(it.qty<=0) cart=cart.filter(c=>c.id!==id);saveCart();updateCart()}
 function removeItem(id){cart=cart.filter(c=>c.id!==id);saveCart();updateCart()}
-function openCart(){document.getElementById('drawer').classList.add('open')}
+function openCart(mode){
+  document.getElementById('drawer').classList.add('open');
+  const pay=document.getElementById('cartPay');
+  if(pay) pay.style.display = (mode==='buy') ? '' : 'none';
+}
 function closeCart(){document.getElementById('drawer').classList.remove('open')}
+
+function buyNow(id){
+  addToCart(id, true);
+  openCart('buy');
+}
 
 function checkout(){
   if(cart.length===0) return toast('Tu carrito está vacío');
