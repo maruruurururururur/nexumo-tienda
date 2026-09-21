@@ -96,6 +96,7 @@ function initPayPalButtons() {
         toast('No se pudo crear el pedido. Inténtalo de nuevo o usa Bizum / Transferencia.');
         throw new Error('No se pudo crear el pedido');
       }
+      sessionStorage.setItem('nexumo_sig', json.sig || '');
       return json.id;
     },
     onApprove: async (data, actions) => {
@@ -104,7 +105,7 @@ function initPayPalButtons() {
         const res = await fetch(NEXUMO_CONFIG.apiBaseUrl + '/api/paypal/capture-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId: data.orderID, email: getEmail(), items: cartItems() }),
+          body: JSON.stringify({ orderId: data.orderID, email: getEmail(), items: cartItems(), sig: sessionStorage.getItem('nexumo_sig') || '' }),
         });
         json = await res.json();
       } catch (e) {
@@ -116,6 +117,7 @@ function initPayPalButtons() {
         return;
       }
       localStorage.removeItem('nexumo_cart');
+      sessionStorage.removeItem('nexumo_sig');
       window.location.href = 'pago-exitoso.html?metodo=paypal&pedido=' + (json.pedido || '') + '&token=' + json.token;
     },
     onCancel: () => { window.location.href = 'pago-cancelado.html'; },
