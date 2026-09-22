@@ -107,7 +107,7 @@ function updateCart(){
       const qty = parseInt(c.qty)||0;
       return `
       <div class="ci">
-        <div style="width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,#1a0a0a,#2a0000);display:grid;place-items:center;border:1px solid #2a2a2a"><i data-lucide="package" style="width:22px;height:22px;color:#ff1f1f"></i></div>
+        <div style="width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,#0a1428,#0a1f44);display:grid;place-items:center;border:1px solid #2a2a2a"><i data-lucide="package" style="width:22px;height:22px;color:#3b82f6"></i></div>
         <div style="flex:1">
           <h5>${c.name}</h5><div style="color:var(--red);font-weight:800;font-size:13px">€${price.toFixed(2)}</div>
           <div class="qty"><button onclick="chgQty(${c.id},-1)">−</button><span style="font-weight:800;font-size:13px">${qty}</span><button onclick="chgQty(${c.id},1)">+</button><button onclick="removeItem(${c.id})" style="margin-left:auto;background:transparent;border:none;color:#777;cursor:pointer;font-size:12px;text-decoration:underline">Quitar</button></div>
