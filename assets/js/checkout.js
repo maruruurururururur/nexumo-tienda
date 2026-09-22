@@ -2,7 +2,7 @@ function cartItems() {
   return JSON.parse(localStorage.getItem('nexumo_cart') || '[]');
 }
 
-function cartTotal() {
+function checkoutTotal() {
   return cartItems().reduce((s, c) => s + c.price * c.qty, 0).toFixed(2);
 }
 
@@ -16,7 +16,7 @@ function getDiscount() {
 function saveDiscount(d) { localStorage.setItem('nexumo_discount', JSON.stringify(d)); }
 function clearDiscount() { localStorage.removeItem('nexumo_discount'); }
 function discountTotal() {
-  const t = parseFloat(cartTotal());
+  const t = parseFloat(checkoutTotal());
   const d = getDiscount();
   if (!d || !NEXUMO_CONFIG.discounts?.enabled) return t;
   return Math.max(0, t * (1 - (d.percent || 0) / 100));
