@@ -102,16 +102,18 @@ function updateCart(){
 }
 function chgQty(id,d){const it=cart.find(c=>c.id===id);if(!it)return;it.qty+=d;if(it.qty<=0) cart=cart.filter(c=>c.id!==id);saveCart();updateCart()}
 function removeItem(id){cart=cart.filter(c=>c.id!==id);saveCart();updateCart()}
-function openCart(mode){
+function openCart(){
   document.getElementById('drawer').classList.add('open');
-  const pay=document.getElementById('cartPay');
-  if(pay) pay.style.display = (mode==='buy') ? '' : 'none';
 }
 function closeCart(){document.getElementById('drawer').classList.remove('open')}
 
 function buyNow(id){
-  addToCart(id, true);
-  openCart('buy');
+  const p=PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const ex=cart.find(x=>x.id===id);
+  if(ex) ex.qty++; else cart.push({id:p.id,name:p.name,price:p.price,qty:1});
+  saveCart();
+  window.location.href = 'pages/checkout.html';
 }
 
 function checkout(){
