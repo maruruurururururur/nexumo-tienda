@@ -3,7 +3,7 @@ const NEXUMO_CONFIG = {
   supportEmail: "astrihub@gmail.com",
   currency: "EUR",
 
-  apiBaseUrl: "https://nexumo-api.vercel.app",
+  apiBaseUrl: "",
 
   discord: {
     username: "maruuxz_",
