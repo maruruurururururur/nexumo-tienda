@@ -12,7 +12,6 @@ const NEXUMO_CONFIG = {
   discounts: {
     enabled: true,
     codes: {
-      "FRE€100": { percent: 100, label: "100% GRATIS" },
     },
   },
 
