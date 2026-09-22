@@ -119,7 +119,25 @@ function updateCart(){
 }
 function chgQty(id,d){const it=cart.find(c=>c.id===id);if(!it)return;it.qty+=d;if(it.qty<=0) cart=cart.filter(c=>c.id!==id);saveCart();updateCart()}
 function removeItem(id){cart=cart.filter(c=>c.id!==id);saveCart();updateCart()}
+function syncCart(){
+  try {
+    const saved = localStorage.getItem('nexumo_cart');
+    const arr = saved ? JSON.parse(saved) : [];
+    if(!Array.isArray(arr)) return;
+    const clean = arr
+      .map(c => {
+        const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(x => x.id === Number(c && c.id)) : null;
+        if(!p) return null;
+        const qty = Math.min(99, Math.max(1, parseInt(c.qty) || 1));
+        return { id: p.id, name: p.name, price: p.price, qty };
+      })
+      .filter(Boolean);
+    if(clean.length || arr.length === 0) cart = clean;
+  } catch(e){}
+}
 function openCart(){
+  syncCart();
+  updateCart();
   document.getElementById('drawer').classList.add('open');
 }
 function closeCart(){document.getElementById('drawer').classList.remove('open')}
