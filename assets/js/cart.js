@@ -136,9 +136,13 @@ function syncCart(){
   } catch(e){}
 }
 function openCart(){
-  syncCart();
-  updateCart();
-  document.getElementById('drawer').classList.add('open');
+  try{
+    syncCart();
+    updateCart();
+    document.getElementById('drawer').classList.add('open');
+  }catch(e){
+    toast('Error cesta: ' + (e && e.message ? e.message : e));
+  }
 }
 function closeCart(){document.getElementById('drawer').classList.remove('open')}
 
