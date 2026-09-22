@@ -34,9 +34,9 @@ localStorage.removeItem('nexumo_cart');
     if(!data.files || !data.files.length){ empty.style.display='block'; return; }
     wrap.innerHTML = data.files.map(f=>`
       <a href="${NEXUMO_CONFIG.apiBaseUrl}${f.url}" download style="display:flex;align-items:center;gap:12px;background:#131313;border:1px solid var(--border);border-radius:14px;padding:14px;text-decoration:none;transition:.2s">
-        <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0a1428,#0a1f44);border:1px solid #2a2a2a;display:grid;place-items:center;flex-shrink:0"><i data-lucide="download" style="width:20px;height:20px;color:#3b82f6"></i></div>
+        <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1a0a0a,#2a0000);border:1px solid #2a2a2a;display:grid;place-items:center;flex-shrink:0"><i data-lucide="download" style="width:20px;height:20px;color:#ff1f1f"></i></div>
         <div style="flex:1;text-align:left"><div style="font-weight:800;font-size:14px;color:#fff">${f.name}</div><div style="font-size:12px;color:#8e8e8e">Descargar ahora</div></div>
-        <i data-lucide="arrow-right" style="width:16px;height:16px;color:#3b82f6"></i>
+        <i data-lucide="arrow-right" style="width:16px;height:16px;color:#ff1f1f"></i>
       </a>`).join('');
     lucide.createIcons();
   }catch(e){

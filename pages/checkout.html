@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Checkout seguro — NEXUMO</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231e6fff'/%3E%3Cpath d='M16 7L7 11l9 4 9-4-9-4zM7 16l9 4 9-4M7 21l9 4 9-4' stroke='white' stroke-width='1.7' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ff0f0f'/%3E%3Cpath d='M16 7L7 11l9 4 9-4-9-4zM7 16l9 4 9-4M7 21l9 4 9-4' stroke='white' stroke-width='1.7' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/style.css?v=17">
+<link rel="stylesheet" href="../assets/css/style.css?v=16">
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.511.0/dist/umd/lucide.min.js"></script>
 </head>
 <body>
@@ -34,7 +34,7 @@
       <span style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:2px 8px;font-weight:800;color:#eb001b">●● <span style="color:#f79e1b">Mastercard</span></span>
       <span style="color:#8e8e8e">+more</span>
     </div>
-    <div id="paypalDebug" style="display:none;margin-top:8px;background:#0a1428;border:1px solid rgba(30,111,255,.3);border-radius:10px;padding:10px;font-size:11px;color:#ffb4b4;word-break:break-word"></div>
+    <div id="paypalDebug" style="display:none;margin-top:8px;background:#1a0a0a;border:1px solid rgba(255,15,15,.3);border-radius:10px;padding:10px;font-size:11px;color:#ffb4b4;word-break:break-word"></div>
 
     <label class="pay-method"><input type="radio" name="pay" value="manual">
       <span><strong>Bizum / Transferencia</strong><br><small style="color:#8e8e8e">Pagas y contactas por Discord para recibir tu pedido</small></span>
@@ -43,7 +43,7 @@
 
     <button class="btn-apply" id="btnPay" onclick="doPay()">Pagar <span id="payTotal">€0.00</span> <i data-lucide="lock" style="width:14px;height:14px"></i></button>
     <p style="color:#666;font-size:12px;text-align:center;margin-top:10px"><i data-lucide="shield-check" style="width:12px;height:12px;display:inline-block;vertical-align:middle;color:var(--red)"></i> Pago cifrado SSL · Nunca guardamos tu tarjeta · Soporte: astrihub@gmail.com</p>
-    <div id="cfgWarn" style="display:none;margin-top:12px;background:#0a1428;border:1px solid rgba(30,111,255,.3);border-radius:12px;padding:12px;font-size:12px;color:#ffb4b4"></div>
+    <div id="cfgWarn" style="display:none;margin-top:12px;background:#1a0a0a;border:1px solid rgba(255,15,15,.3);border-radius:12px;padding:12px;font-size:12px;color:#ffb4b4"></div>
   </div>
 
   <div class="checkout-card">
@@ -103,10 +103,10 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<script src="../assets/js/config.js?v=17"></script>
-<script src="../assets/js/products.js?v=17"></script>
-<script src="../assets/js/cart.js?v=17"></script>
-<script src="../assets/js/checkout.js?v=17"></script>
+<script src="../assets/js/config.js?v=16"></script>
+<script src="../assets/js/products.js?v=16"></script>
+<script src="../assets/js/cart.js?v=16"></script>
+<script src="../assets/js/checkout.js?v=16"></script>
 <script>
 lucide.createIcons();
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
@@ -146,8 +146,8 @@ function renderCheckout(){
     if(payBtn) payBtn.innerHTML = 'Pagar <span id="payTotal">€'+discTotal.toFixed(2)+'</span> <i data-lucide="lock" style="width:14px;height:14px"></i>';
   }
 
-  if(!items.length){ wrap.innerHTML = '<div class="empty">Carrito vacío. <a href="../index.html" style="color:#1e6fff;text-decoration:underline">Volver a la tienda</a></div>'; if(freeBox) freeBox.style.display='none'; lucide.createIcons(); return; }
-  wrap.innerHTML = items.map(c=>`<div class="ci"><div style="flex:1"><h5>${c.name} x${c.qty}</h5><div style="color:#3b82f6;font-weight:800">€${(c.price*c.qty).toFixed(2)}</div></div><button onclick='delCx(${c.id})' style="background:transparent;border:none;color:#777;cursor:pointer;text-decoration:underline;font-size:12px">Quitar</button></div>`).join('');
+  if(!items.length){ wrap.innerHTML = '<div class="empty">Carrito vacío. <a href="../index.html" style="color:#ff0f0f;text-decoration:underline">Volver a la tienda</a></div>'; if(freeBox) freeBox.style.display='none'; lucide.createIcons(); return; }
+  wrap.innerHTML = items.map(c=>`<div class="ci"><div style="flex:1"><h5>${c.name} x${c.qty}</h5><div style="color:#ff1f1f;font-weight:800">€${(c.price*c.qty).toFixed(2)}</div></div><button onclick='delCx(${c.id})' style="background:transparent;border:none;color:#777;cursor:pointer;text-decoration:underline;font-size:12px">Quitar</button></div>`).join('');
   lucide.createIcons();
 }
 function delCx(id){ let c = JSON.parse(localStorage.getItem('nexumo_cart')||'[]'); c=c.filter(x=>x.id!==id); localStorage.setItem('nexumo_cart',JSON.stringify(c)); renderCheckout(); }
