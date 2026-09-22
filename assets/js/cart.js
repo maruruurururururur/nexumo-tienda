@@ -16,6 +16,8 @@ cart = cart
 
 function saveCart(){ localStorage.setItem('nexumo_cart', JSON.stringify(cart)); }
 
+function icons(){ try{ if(window.lucide) lucide.createIcons(); }catch(e){} }
+
 function renderGrid(list){
   const g = document.getElementById('grid');
   if(!g) return;
@@ -38,14 +40,14 @@ function renderGrid(list){
             <span class="stock"><span class="dot ${p.stock.includes('stock')||p.stock.includes('In')?'ok':'out'}"></span>${p.stock}</span>
           </div>
           <div class="actions">
-            <button class="btn-cart" onclick="addToCart(${p.id})" aria-label="Anadir"><i data-lucide="shopping-cart" style="width:16px;height:16px"></i></button>
+            <button class="btn-cart" onclick="addToCart(${p.id});openCart()" aria-label="Anadir"><i data-lucide="shopping-cart" style="width:16px;height:16px"></i></button>
             <button class="btn-get" onclick="buyNow(${p.id})">OBTENER</button>
           </div>
         </div>
       </article>
     `).join('');
   }
-  lucide.createIcons();
+  icons();
 }
 
 function applyFilters(){
@@ -79,26 +81,30 @@ function addToCart(id){
 }
 function cartTotal(){ return cart.reduce((s,c)=>(Number(c.price)||0)*(parseInt(c.qty)||0)+s,0); }
 function updateCart(){
+  const total = cartTotal();
   const cc = document.getElementById('cartCount');
-  if(cc) cc.textContent = cart.reduce((s,c)=>s+c.qty,0);
+  if(cc) cc.textContent = cart.reduce((s,c)=>s+(parseInt(c.qty)||0),0);
+  const st = document.getElementById('subtotal');
+  if(st) st.textContent='€'+total.toFixed(2);
   const wrap=document.getElementById('cartItems');
   if(!wrap) return;
   if(cart.length===0){
     wrap.innerHTML='<div class="empty">Tu carrito está vacío.<br>Añade algún pack para empezar <i data-lucide="rocket" style="width:14px;height:14px;display:inline-block;vertical-align:middle;color:var(--red)"></i></div>';
-    lucide.createIcons();
   } else {
-    wrap.innerHTML=cart.map(c=>`
+    wrap.innerHTML=cart.map(c=>{
+      const price = Number(c.price)||0;
+      const qty = parseInt(c.qty)||0;
+      return `
       <div class="ci">
         <div style="width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,#1a0a0a,#2a0000);display:grid;place-items:center;border:1px solid #2a2a2a"><i data-lucide="package" style="width:22px;height:22px;color:#ff1f1f"></i></div>
         <div style="flex:1">
-          <h5>${c.name}</h5><div style="color:var(--red);font-weight:800;font-size:13px">€${c.price.toFixed(2)}</div>
-          <div class="qty"><button onclick="chgQty(${c.id},-1)">−</button><span style="font-weight:800;font-size:13px">${c.qty}</span><button onclick="chgQty(${c.id},1)">+</button><button onclick="removeItem(${c.id})" style="margin-left:auto;background:transparent;border:none;color:#777;cursor:pointer;font-size:12px;text-decoration:underline">Quitar</button></div>
+          <h5>${c.name}</h5><div style="color:var(--red);font-weight:800;font-size:13px">€${price.toFixed(2)}</div>
+          <div class="qty"><button onclick="chgQty(${c.id},-1)">−</button><span style="font-weight:800;font-size:13px">${qty}</span><button onclick="chgQty(${c.id},1)">+</button><button onclick="removeItem(${c.id})" style="margin-left:auto;background:transparent;border:none;color:#777;cursor:pointer;font-size:12px;text-decoration:underline">Quitar</button></div>
         </div>
-      </div>`).join('');
-    lucide.createIcons();
+      </div>`;
+    }).join('');
   }
-  const st = document.getElementById('subtotal');
-  if(st) st.textContent='€'+cartTotal().toFixed(2);
+  icons();
 }
 function chgQty(id,d){const it=cart.find(c=>c.id===id);if(!it)return;it.qty+=d;if(it.qty<=0) cart=cart.filter(c=>c.id!==id);saveCart();updateCart()}
 function removeItem(id){cart=cart.filter(c=>c.id!==id);saveCart();updateCart()}

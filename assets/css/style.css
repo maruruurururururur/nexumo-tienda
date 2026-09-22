@@ -144,6 +144,7 @@ footer{margin-top:56px;border-top:1px solid var(--border);background:#060606}
 .btn-checkout{background:linear-gradient(90deg,#ff0f0f,#c40000);color:#fff;border:none;border-radius:12px;padding:14px;font-weight:900;cursor:pointer;box-shadow:0 10px 24px var(--red-glow);display:flex;align-items:center;justify-content:center;gap:6px}
 .toast{position:fixed;top:18px;right:18px;transform:translateX(120%);background:#111;border:1px solid var(--border);color:#fff;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;z-index:90;display:flex;align-items:center;gap:8px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .toast.show{transform:translateX(0);opacity:1}
+.drawer.open~.chat-launcher,.drawer.open~.chat-panel{display:none!important}
 .mobile-menu{position:fixed;inset:0;z-index:70;display:none}
 .mobile-menu.open{display:block}
 .mobile-menu .bg{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px)}
