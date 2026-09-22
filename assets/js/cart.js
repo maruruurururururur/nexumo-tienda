@@ -1,20 +1,31 @@
 let activeCat = 'all';
+if(typeof toast === 'undefined'){ var toast = function(m){ try{ alert(m); }catch(e){} }; }
 let cart = [];
 try {
   const saved = localStorage.getItem('nexumo_cart');
   if (saved) cart = JSON.parse(saved);
 } catch(e){}
 if(!Array.isArray(cart)) cart = [];
+const rawLen = cart.length;
 cart = cart
   .map(c => {
-    const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(x => x.id === Number(c.id)) : null;
+    const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(x => x.id === Number(c && c.id)) : null;
     if(!p) return null;
     const qty = Math.min(99, Math.max(1, parseInt(c.qty) || 1));
     return { id: p.id, name: p.name, price: p.price, qty };
   })
   .filter(Boolean);
 
-function saveCart(){ localStorage.setItem('nexumo_cart', JSON.stringify(cart)); }
+function saveCart(){
+  try{ localStorage.setItem('nexumo_cart', JSON.stringify(cart)); }
+  catch(e){ toast('No se pudo guardar la cesta (almacenamiento bloqueado)'); }
+}
+function repairCart(){
+  try{ localStorage.removeItem('nexumo_cart'); }catch(e){}
+  cart = [];
+  saveCart(); updateCart();
+  toast('Cesta vaciada. Añade de nuevo tus productos.');
+}
 
 function icons(){ try{ if(window.lucide) lucide.createIcons(); }catch(e){} }
 
