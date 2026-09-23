@@ -49,6 +49,8 @@ const TOKEN_TTL = 24 * 60 * 60 * 1000;
 
 const orders = new Map();
 
+const redeemed = new Map();
+
 function grantAccess(items, email) {
   const files = [];
   const names = [];
@@ -263,6 +265,12 @@ app.post('/api/free', (req, res) => {
     const key = String(code || '').trim().toUpperCase();
     const discount = DISCOUNTS[key];
     if (!discount) return res.status(400).json({ error: 'Código de descuento no válido' });
+    if (discount.products && !items.every(i => discount.products.includes(Number(i.id)))) {
+      return res.status(400).json({ error: 'Ese código solo vale para productos concretos.' });
+    }
+    if (discount.maxUses && (redeemed.get(key) || 0) >= discount.maxUses) {
+      return res.status(400).json({ error: 'Ese código ya fue usado.' });
+    }
 
     const total = parseFloat(totalOf(items));
     const finalPrice = total * (1 - (discount.percent || 0) / 100);
@@ -274,6 +282,7 @@ app.post('/api/free', (req, res) => {
     if (!granted) {
       return res.status(400).json({ error: 'No se pudo identificar el pedido. Escríbenos por Discord: maruuxz_' });
     }
+    if (discount.maxUses) redeemed.set(key, (redeemed.get(key) || 0) + 1);
     emailOrder({
       to: email, items, total: 0, paymentMethod: 'Código de descuento (100%)',
       invoiceNo: 'FREE-' + Date.now(), files: granted.files, token: granted.token, frontUrl: FRONT_URL,
