@@ -93,7 +93,19 @@
       <div class="bar-row"><span class="label">1 <i data-lucide="star" style="width:10px;height:10px;fill:#b5b5b5;stroke:#b5b5b5"></i></span><div class="bar"><div class="fill" style="width:0%"></div></div><span class="cnt">0</span></div>
     </div>
   </div>
-  <div class="write-wrap"><button class="btn-write" onclick="toast('¡Gracias! Escribe tu reseña pronto.')">Escribir reseña</button></div>
+  <div class="write-wrap"><button class="btn-write" onclick="toggleReviewForm()">Escribir reseña</button></div>
+  <div id="reviewForm" style="display:none;max-width:520px;margin:14px auto 0;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px">
+    <div id="revStars" style="display:flex;gap:6px;justify-content:center;margin-bottom:12px">
+      <button onclick="setRating(1)" data-star="1" style="background:none;border:none;cursor:pointer;font-size:30px;color:#444">★</button>
+      <button onclick="setRating(2)" data-star="2" style="background:none;border:none;cursor:pointer;font-size:30px;color:#444">★</button>
+      <button onclick="setRating(3)" data-star="3" style="background:none;border:none;cursor:pointer;font-size:30px;color:#444">★</button>
+      <button onclick="setRating(4)" data-star="4" style="background:none;border:none;cursor:pointer;font-size:30px;color:#444">★</button>
+      <button onclick="setRating(5)" data-star="5" style="background:none;border:none;cursor:pointer;font-size:30px;color:#444">★</button>
+    </div>
+    <input id="r-name" class="field" placeholder="Tu nombre" style="margin-bottom:10px">
+    <textarea id="r-msg" class="field" placeholder="Cuenta tu experiencia..." rows="3" style="margin-bottom:10px;resize:vertical"></textarea>
+    <button class="btn-apply" onclick="submitReview()">Publicar reseña</button>
+  </div>
   <div class="review-list">
     <div class="rev"><strong>Rodrigo</strong><div class="stars"><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i></div><p>El proveedor de relojes es brutal, ya he vendido 3.</p><time>Aug 21, 2026</time></div>
     <div class="rev"><strong>Marina · Reseller</strong><div class="stars"><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i><i data-lucide="star" style="width:12px;height:12px;fill:var(--red);stroke:var(--red)"></i></div><p>Pack de ropa y zapatos con margen increible. NEXUMO top.</p><time>Aug 18, 2026</time></div>
@@ -229,8 +241,33 @@
   if(!done) send(true);
 }catch(e){}})();
 
-function submitContact(){
-  const name=document.getElementById('c-name').value.trim();
+let revRating = 5;
+function toggleReviewForm(){
+  const f = document.getElementById('reviewForm');
+  f.style.display = (f.style.display === 'none') ? 'block' : 'none';
+  setRating(revRating);
+}
+function setRating(n){
+  revRating = n;
+  document.querySelectorAll('#revStars button').forEach(b => {
+    b.style.color = Number(b.dataset.star) <= n ? '#ffb800' : '#444';
+  });
+}
+function submitReview(){
+  const name = document.getElementById('r-name').value.trim();
+  const msg = document.getElementById('r-msg').value.trim();
+  if(!name) return toast('Pon tu nombre');
+  if(!msg) return toast('Escribe tu reseña');
+  toast('Publicando...');
+  fetch((typeof NEXUMO_CONFIG!=='undefined'&&NEXUMO_CONFIG.apiBaseUrl||'')+'/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,rating:revRating,message:msg})})
+    .then(r=>r.json()).then(d=>{
+      if(d.ok){ toast('¡Gracias por tu reseña!'); document.getElementById('r-name').value=''; document.getElementById('r-msg').value=''; setRating(5); toggleReviewForm(); }
+      else toast('Error: '+(d.error||''));
+    })
+    .catch(()=>toast('No se pudo enviar'));
+}
+
+function submitContact(){  const name=document.getElementById('c-name').value.trim();
   const email=document.getElementById('c-email').value.trim();
   const msg=document.getElementById('c-msg').value.trim();
   if(!msg) return toast('Escribe un mensaje');
