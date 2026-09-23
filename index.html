@@ -261,11 +261,24 @@ function submitReview(){
   toast('Publicando...');
   fetch((typeof NEXUMO_CONFIG!=='undefined'&&NEXUMO_CONFIG.apiBaseUrl||'')+'/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,rating:revRating,message:msg})})
     .then(r=>r.json()).then(d=>{
-      if(d.ok){ toast('¡Gracias por tu reseña!'); document.getElementById('r-name').value=''; document.getElementById('r-msg').value=''; setRating(5); toggleReviewForm(); }
+      if(d.ok){ toast(d.published ? '¡Gracias! Tu reseña ya es visible.' : '¡Gracias! La revisaremos antes de publicarla.'); document.getElementById('r-name').value=''; document.getElementById('r-msg').value=''; setRating(5); toggleReviewForm(); if(d.published) loadReviews(); }
       else toast('Error: '+(d.error||''));
     })
     .catch(()=>toast('No se pudo enviar'));
 }
+function escHtml(s){ return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function loadReviews(){
+  const list = document.querySelector('.review-list');
+  if(!list) return;
+  fetch((typeof NEXUMO_CONFIG!=='undefined'&&NEXUMO_CONFIG.apiBaseUrl||'')+'/api/reviews').then(r=>r.json()).then(d=>{
+    (d.reviews||[]).forEach(rv=>{
+      const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
+      list.insertAdjacentHTML('afterbegin',
+        '<div class="rev"><strong>'+escHtml(rv.name)+'</strong><div class="stars" style="color:var(--red);font-size:12px">'+stars+'</div><p>'+escHtml(rv.message)+'</p><time>Reciente · verificado</time></div>');
+    });
+  }).catch(()=>{});
+}
+loadReviews();
 
 function submitContact(){  const name=document.getElementById('c-name').value.trim();
   const email=document.getElementById('c-email').value.trim();
