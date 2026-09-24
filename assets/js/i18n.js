@@ -19,12 +19,17 @@ function prodLoc(p){
   return c;
 }
 
+const FLAGS = {
+es: '<svg width="20" height="14" viewBox="0 0 20 14"><clipPath id="fx"><rect width="20" height="14" rx="3"/></clipPath><g clip-path="url(#fx)"><rect width="20" height="14" fill="#AA151B"/><rect y="3.5" width="20" height="7" fill="#F1BF00"/></g></svg>',
+en: '<svg width="20" height="14" viewBox="0 0 20 14"><clipPath id="fx"><rect width="20" height="14" rx="3"/></clipPath><g clip-path="url(#fx)"><rect width="20" height="14" fill="#012169"/><path d="M0 0l20 14M20 0L0 14" stroke="#fff" stroke-width="2.8"/><path d="M0 0l20 14M20 0L0 14" stroke="#C8102E" stroke-width="1.2"/><path d="M10 0v14M0 7h20" stroke="#fff" stroke-width="4.6"/><path d="M10 0v14M0 7h20" stroke="#C8102E" stroke-width="2.6"/></g></svg>',
+fr: '<svg width="20" height="14" viewBox="0 0 20 14"><clipPath id="fx"><rect width="20" height="14" rx="3"/></clipPath><g clip-path="url(#fx)"><rect width="20" height="14" fill="#fff"/><rect width="6.7" height="14" fill="#0055A4"/><rect x="13.3" width="6.7" height="14" fill="#EF4135"/></g></svg>',
+};
+
 function applyI18n(){
   const l = LANG();
   document.documentElement.lang = l;
-  const flags = { es: '🇪🇸', en: '🇬🇧', fr: '🇫🇷' };
   const f = document.getElementById('langFlag');
-  if(f) f.textContent = flags[l] || '🇪🇸';
+  if(f) f.innerHTML = FLAGS[l] || FLAGS.es;
   document.querySelectorAll('[data-i18n]').forEach(e => { e.textContent = T(e.getAttribute('data-i18n')); });
   document.querySelectorAll('[data-i18n-html]').forEach(e => { e.innerHTML = T(e.getAttribute('data-i18n-html')); });
   document.querySelectorAll('[data-i18n-ph]').forEach(e => { e.setAttribute('placeholder', T(e.getAttribute('data-i18n-ph'))); });
