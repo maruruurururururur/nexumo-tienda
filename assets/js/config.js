@@ -10,7 +10,7 @@ const NEXUMO_CONFIG = {
   },
 
   discounts: {
-    enabled: true,
+    enabled: false,
     codes: {
     },
   },

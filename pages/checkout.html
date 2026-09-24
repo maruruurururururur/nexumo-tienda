@@ -119,6 +119,9 @@ function renderCheckout(){
   const wrap = document.getElementById('cxItems');
   const total = items.reduce((s,c)=>s+(Number(c.price)||0)*(parseInt(c.qty)||0),0);
   const d = typeof getDiscount === 'function' ? getDiscount() : null;
+  const hasCodes = NEXUMO_CONFIG.discounts?.enabled && Object.keys(NEXUMO_CONFIG.discounts?.codes || {}).length > 0;
+  const discInput = document.querySelector('.discount-input');
+  if (discInput) discInput.style.display = hasCodes ? '' : 'none';
   const discTotal = typeof discountTotal === 'function' ? discountTotal() : total;
   const discAmt = total - discTotal;
 
