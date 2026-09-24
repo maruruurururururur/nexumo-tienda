@@ -12,8 +12,6 @@ const NEXUMO_CONFIG = {
   discounts: {
     enabled: true,
     codes: {
-      "PERFUME100": { percent: 100, label: "Perfumes gratis (1 uso)" },
-      "NEXUMO100": { percent: 100, label: "Todo gratis 100%" },
     },
   },
 
