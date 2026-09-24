@@ -24,13 +24,13 @@ function discountTotal() {
 function applyDiscount() {
   const box = document.getElementById('cx-code');
   const raw = (box ? box.value : '').trim().toUpperCase();
-  if (!raw) return toast('Escribe un código de descuento');
+  if (!raw) return toast(T('cx.codeWrite'));
   const codes = NEXUMO_CONFIG.discounts?.codes || {};
   const conf = codes[raw];
-  if (!conf) { toast('Código no válido'); return; }
+  if (!conf) { toast(T('cx.codeBad')); return; }
   saveDiscount({ code: raw, percent: conf.percent, label: conf.label });
   if (box) box.value = '';
-  toast('¡Descuento aplicado: ' + (conf.label || '') + '!');
+  toast(T('cx.codeOk') + (conf.label || '') + '!');
   if (typeof renderCheckout === 'function') renderCheckout();
 }
 function removeDiscount() {
@@ -40,23 +40,23 @@ function removeDiscount() {
 
 async function payFree() {
   const email = getEmail();
-  if (!email || !email.includes('@')) return toast('Pon tu email para recibir el acceso');
+  if (!email || !email.includes('@')) return toast(T('cx.emailNeed'));
   const d = getDiscount();
   const code = d ? d.code : '';
   try {
-    toast('Generando tu pedido gratis...');
+    toast(T('cx.freeGen'));
     const res = await fetch((NEXUMO_CONFIG.apiBaseUrl || '') + '/api/free', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: cartItems(), email, code }),
     });
     const data = await res.json();
-    if (!data.token) { toast('Error: ' + (data.error || 'no se pudo generar')); return; }
+    if (!data.token) { toast('Error: ' + (data.error || T('cx.freeFail'))); return; }
     localStorage.removeItem('nexumo_cart');
     clearDiscount();
     window.location.href = 'pago-exitoso.html?metodo=free&pedido=' + (data.pedido || '') + '&token=' + data.token;
   } catch (e) {
-    toast('No se pudo conectar con el servidor');
+    toast(T('cx.noServer'));
   }
 }
 
@@ -72,7 +72,7 @@ function initPayPalButtons() {
     createOrder: async (data, actions) => {
       const items = cartItems();
       if (!items.length) {
-        toast('Tu carrito está vacío. Añade productos primero');
+        toast(T('cx.cartEmpty'));
         throw new Error('Carrito vacío');
       }
       let res;
@@ -83,18 +83,18 @@ function initPayPalButtons() {
           body: JSON.stringify({ items }),
         });
       } catch (e) {
-        toast('Servidor de pagos no disponible. Prueba con Bizum / Transferencia.');
+        toast(T('cx.noPay'));
         throw e;
       }
       let json = null;
       try {
         json = await res.json();
       } catch (e) {
-        toast('Servidor de pagos no disponible. Prueba con Bizum / Transferencia.');
+        toast(T('cx.noPay'));
         throw new Error('Pagos no disponibles');
       }
       if (!json.id) {
-        toast('No se pudo crear el pedido. Inténtalo de nuevo o usa Bizum / Transferencia.');
+        toast(T('cx.noOrder'));
         throw new Error('No se pudo crear el pedido');
       }
       sessionStorage.setItem('nexumo_sig', json.sig || '');
@@ -110,11 +110,11 @@ function initPayPalButtons() {
         });
         json = await res.json();
       } catch (e) {
-        toast('No se pudo confirmar el pago. Escríbenos por Discord con tu número de pedido.');
+        toast(T('cx.noConfirm'));
         return;
       }
       if (!json.token) {
-        toast('No se pudo confirmar el pago. Escríbenos por Discord con tu número de pedido.');
+        toast(T('cx.noConfirm'));
         return;
       }
       localStorage.removeItem('nexumo_cart');
@@ -124,8 +124,8 @@ function initPayPalButtons() {
     onCancel: () => { window.location.href = 'pago-cancelado.html'; },
     onError: (err) => {
       const log = document.getElementById('paypalDebug');
-      if (log) { log.style.display = 'block'; log.textContent = 'Pago no disponible ahora mismo. Prueba con Bizum / Transferencia o inténtalo más tarde.'; }
-      toast('Pago no disponible ahora mismo.');
+      if (log) { log.style.display = 'block'; log.textContent = T('cx.payDown') + ' ' + T('cx.noPay'); }
+      toast(T('cx.payDown'));
     },
   }).render('#paypal-buttons');
 }
@@ -186,19 +186,19 @@ function closeManualModal() {
 
 function copyDiscord() {
   const discord = document.getElementById('mm-discord')?.textContent || 'maruuxz_';
-  navigator.clipboard?.writeText(discord).then(() => toast('Usuario Discord copiado: ' + discord));
+  navigator.clipboard?.writeText(discord).then(() => toast(T('cx.copied') + discord));
 }
 
 async function doPay() {
   const email = getEmail();
-  if (!email || !email.includes('@')) return toast('Pon tu email para recibir el acceso');
+  if (!email || !email.includes('@')) return toast(T('cx.emailNeed'));
 
   if (discountTotal() <= 0.01) { await payFree(); return; }
 
   const method = document.querySelector('input[name="pay"]:checked').value || 'paypal';
   if (method === 'paypal') {
     if (NEXUMO_CONFIG.payments.paypal.clientId) {
-      toast('Usa el botón de PayPal de arriba');
+      toast(T('cx.useBtn'));
     } else {
       payWithPayPalFallback();
     }
@@ -223,11 +223,11 @@ async function doPay() {
   const id = NEXUMO_CONFIG.payments.paypal.clientId;
   if (!id) return;
   const s = document.createElement('script');
-  s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(id)}&currency=${NEXUMO_CONFIG.payments.paypal.currency || 'EUR'}&intent=capture&components=buttons&enable-funding=card&disable-funding=paylater,credit&locale=es_ES`;
+  s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(id)}&currency=${NEXUMO_CONFIG.payments.paypal.currency || 'EUR'}&intent=capture&components=buttons&enable-funding=card&disable-funding=paylater,credit&locale=${(typeof LANG==='function'&&LANG()==='fr')?'fr_FR':((typeof LANG==='function'&&LANG()==='en')?'en_US':'es_ES')}`;
   s.onload = () => initPayPalButtons();
   s.onerror = () => {
     const log = document.getElementById('paypalDebug');
-    if (log) { log.style.display = 'block'; log.textContent = 'No se pudo cargar PayPal. Revisa conexión o Client ID.'; }
+    if (log) { log.style.display = 'block'; log.textContent = T('cx.sdkFail'); }
   };
   document.head.appendChild(s);
 })();

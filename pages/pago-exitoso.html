@@ -1,19 +1,22 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pago exitoso — NEXUMO</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/css/style.css?v=10"><script src="https://cdn.jsdelivr.net/npm/lucide@0.511.0/dist/umd/lucide.min.js"></script></head><body>
-<div class="container" style="max-width:640px;margin:60px auto;text-align:center">
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pago exitoso — NEXUMO</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/css/style.css?v=22"><script src="https://cdn.jsdelivr.net/npm/lucide@0.511.0/dist/umd/lucide.min.js"></script><style>.lang-wrap{position:relative}.lang-btn{background:#161616;border:1px solid #2a2a2a;color:#fff;border-radius:999px;min-width:40px;height:36px;padding:0 10px;font-size:18px;cursor:pointer;display:grid;place-items:center}.lang-menu{position:absolute;top:42px;right:0;background:#141414;border:1px solid #2a2a2a;border-radius:12px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:95;min-width:130px}.lang-menu.open{display:flex}.lang-menu button{background:none;border:none;color:#fff;font-size:13px;font-weight:600;padding:8px 10px;border-radius:8px;cursor:pointer;text-align:left;white-space:nowrap}.lang-menu button:hover{background:#222}.topbar{display:flex;justify-content:flex-end;max-width:640px;margin:14px auto 0;padding:0 16px}</style></head><body>
+<div class="topbar"><div class="lang-wrap"><button class="lang-btn" onclick="toggleLang(event)" aria-label="Idioma"><span id="langFlag">🇪🇸</span></button><div class="lang-menu" id="langMenu"><button onclick="setLang('es')">🇪🇸 Español</button><button onclick="setLang('en')">🇬🇧 English</button><button onclick="setLang('fr')">🇫🇷 Français</button></div></div></div>
+<div class="container" style="max-width:640px;margin:30px auto;text-align:center">
 <div class="checkout-card">
   <div style="width:64px;height:64px;border-radius:999px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);display:grid;place-items:center;margin:0 auto 14px"><i data-lucide="check" style="width:30px;height:30px;color:#22c55e"></i></div>
-  <h1 style="font-family:Sora">¡Pago completado!</h1>
-  <p style="color:#8e8e8e;margin:10px 0">Tu pedido está listo. Descarga tus productos aquí abajo. Pedido: <strong id="oid"></strong></p>
+  <h1 style="font-family:Sora" data-i18n="ok.t">¡Pago completado!</h1>
+  <p style="color:#8e8e8e;margin:10px 0"><span data-i18n="ok.d">Tu pedido está listo. Descarga tus productos aquí abajo. Pedido:</span> <strong id="oid"></strong></p>
 
   <div id="downloads" style="display:grid;gap:10px;margin:18px 0;text-align:left"></div>
-  <div id="dlEmpty" style="display:none;color:#8e8e8e;font-size:13px;line-height:1.6;margin:14px 0">No encontramos tus descargas. Escríbenos por <strong style="color:#fff">Discord: maruuxz_</strong> con tu número de pedido y te las enviamos.</div>
+  <div id="dlEmpty" style="display:none;color:#8e8e8e;font-size:13px;line-height:1.6;margin:14px 0"><span data-i18n="ok.empty">No encontramos tus descargas. Escríbenos por Discord: maruuxz_ con tu número de pedido y te las enviamos.</span></div>
 
-  <a class="btn-apply" style="text-decoration:none" href="../index.html">Volver a la tienda</a>
-  <p style="margin-top:12px;font-size:12px;color:#666">¿Dudas? astrihub@gmail.com · Discord: maruuxz_</p>
+  <a class="btn-apply" style="text-decoration:none" href="../index.html" data-i18n="ok.back">Volver a la tienda</a>
+  <p style="margin-top:12px;font-size:12px;color:#666" data-i18n="ok.help">¿Dudas? astrihub@gmail.com · Discord: maruuxz_</p>
 </div>
 </div>
-<script src="../assets/js/config.js?v=10"></script>
+<script src="../assets/js/config.js?v=22"></script>
+<script src="../assets/js/i18n.js?v=22"></script>
 <script>
+applyI18n();
 function toast(m){const t=document.createElement('div');t.className='toast show';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
 lucide.createIcons();
 document.getElementById('oid').textContent = new URLSearchParams(location.search).get('pedido')||'';
@@ -35,7 +38,7 @@ localStorage.removeItem('nexumo_cart');
     wrap.innerHTML = data.files.map(f=>`
       <a href="${NEXUMO_CONFIG.apiBaseUrl}${f.url}" download style="display:flex;align-items:center;gap:12px;background:#131313;border:1px solid var(--border);border-radius:14px;padding:14px;text-decoration:none;transition:.2s">
         <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1a0a0a,#2a0000);border:1px solid #2a2a2a;display:grid;place-items:center;flex-shrink:0"><i data-lucide="download" style="width:20px;height:20px;color:#ff1f1f"></i></div>
-        <div style="flex:1;text-align:left"><div style="font-weight:800;font-size:14px;color:#fff">${f.name}</div><div style="font-size:12px;color:#8e8e8e">Descargar ahora</div></div>
+        <div style="flex:1;text-align:left"><div style="font-weight:800;font-size:14px;color:#fff">${f.name}</div><div style="font-size:12px;color:#8e8e8e">${T('ok.dl')}</div></div>
         <i data-lucide="arrow-right" style="width:16px;height:16px;color:#ff1f1f"></i>
       </a>`).join('');
     lucide.createIcons();

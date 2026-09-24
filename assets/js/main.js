@@ -18,7 +18,7 @@ function toggleFaq(btn){const item=btn.closest('.faq-item');const was=item.class
   if(!end || end < Date.now()) end = createEnd(true);
   function tick(){
     let diff = end - Date.now();
-    if(diff <= 0){ end = createEnd(false); diff = end - Date.now(); toast('¡Nueva oferta activada!'); }
+    if(diff <= 0){ end = createEnd(false); diff = end - Date.now(); toast((typeof T==='function')?T('offer.new'):'¡Nueva oferta activada!'); }
     const d = Math.floor(diff/86400000);
     const h = Math.floor(diff%86400000/3600000);
     const m = Math.floor(diff%3600000/60000);
