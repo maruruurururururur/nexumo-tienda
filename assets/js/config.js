@@ -32,7 +32,7 @@ const NEXUMO_CONFIG = {
       enabled: true,
       discord: "maruuxz_",
       iban: "",
-      bizumPhone: "631 01 29 46",
+      bizumPhone: "",
     },
   }
 };
