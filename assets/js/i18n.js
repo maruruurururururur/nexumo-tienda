@@ -398,6 +398,7 @@ en: {
 15: { name: 'Ultimate Dropshipping & Ecommerce Manual', t1: 'Manual', t2: 'Dropshipping' },
 16: { name: 'Shopify, Dropshipping & E-Commerce Master', t1: 'Shopify', t2: 'Master' },
 17: { name: 'Complete Guides Pack', t1: 'Guides', t2: 'Pack' },
+18: { name: 'NFC Cards', t1: 'Cards', t2: 'NFC' },
 },
 fr: {
 1: { name: 'Fournisseur de Legos', t1: 'Fournisseur', t2: 'Legos' },
@@ -417,6 +418,7 @@ fr: {
 15: { name: 'Manuel Définitif de Dropshipping & Ecommerce', t1: 'Manuel', t2: 'Dropshipping' },
 16: { name: 'Shopify, Dropshipping & E-Commerce Maître', t1: 'Shopify', t2: 'Maître' },
 17: { name: 'Pack Guides Complet', t1: 'Pack', t2: 'Guides' },
+18: { name: 'Cartes NFC', t1: 'Cartes', t2: 'NFC' },
 },
 },
 CHAT: {
@@ -436,6 +438,7 @@ items: [
 {id:13,k:['neuroventa','ventas','guia avanzada']},{id:14,k:['arbitraje','reventa','guia maestra']},
 {id:15,k:['dropshipping','ecommerce','manual definitivo']},{id:16,k:['shopify','maestro']},
 {id:17,k:['pack guias','pack completo','todas las guias']},
+{id:18,k:['nfc','tarjeta','tarjetas']},
 ],
 faq: [
 {k:['donde esta mi pedido','no me llega','no llega','llego','llega','descargar','descarga','enlace','link','spam'],a:'Tras pagar recibes todo al instante: los enlaces salen en la página de éxito y además te llegan por email (revisa SPAM, viene de NEXUMO). Los enlaces duran 24h. Si no te llegó nada en 1 hora, escríbenos por Discord (maruuxz_) con tu número de pedido y te lo reenviamos.'},
@@ -466,6 +469,7 @@ items: [
 {id:13,k:['neurosell','sales','advanced guide']},{id:14,k:['arbitrage','resell','master guide']},
 {id:15,k:['dropship','ecommerce','manual']},{id:16,k:['shopify','master']},
 {id:17,k:['guides pack','complete pack','all guides']},
+{id:18,k:['nfc','nfc card','nfc cards']},
 ],
 faq: [
 {k:['where is my order','not received','did not arrive','download','link','email did not','spam'],a:'After paying you get everything instantly: links on the success page plus email (check SPAM, from NEXUMO). Links last 24h. If nothing arrives within 1 hour, write to us on Discord (maruuxz_) with your order number.'},
@@ -496,6 +500,7 @@ items: [
 {id:13,k:['neurovente','vente','guide avancé']},{id:14,k:['arbitrage','revente','guide maître']},
 {id:15,k:['dropshipping','ecommerce','manuel']},{id:16,k:['shopify','maître']},
 {id:17,k:['pack guides','pack complet','tous les guides']},
+{id:18,k:['nfc','carte','cartes']},
 ],
 faq: [
 {k:['où est ma commande','pas reçu','télécharger','lien','email non','spam'],a:"Après paiement tu reçois tout instantanément : liens sur la page de succès + email (vérifie les SPAMS, de NEXUMO). Liens valables 24h. Si rien n'arrive en 1h, écris-nous sur Discord (maruuxz_) avec ton numéro de commande."},

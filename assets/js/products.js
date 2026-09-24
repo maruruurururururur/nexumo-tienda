@@ -16,4 +16,5 @@ const PRODUCTS = [
   {id:15, cat:'proveedor', name:'Manual Definitivo de Dropshipping y Ecommerce', price:3.95, was:14.95, stock:'In stock', title1:'Manual', title2:'Dropshipping', icon:'truck', badge:'OFERTA'},
   {id:16, cat:'proveedor', name:'Shopify, Dropshipping & E-Commerce Maestro', price:3.95, was:14.95, stock:'In stock', title1:'Shopify', title2:'Maestro', icon:'shopping-bag', badge:'OFERTA'},
   {id:17, cat:'pack', name:'Pack Guías Completo', price:9.95, was:39.95, stock:'In stock', title1:'Pack', title2:'Guías', icon:'library', badge:'PACK'},
+  {id:18, cat:'proveedor', name:'Tarjetas NFC', price:1.99, was:6.95, stock:'In stock', title1:'Tarjetas', title2:'NFC', icon:'nfc', badge:'NUEVO'},
 ];
