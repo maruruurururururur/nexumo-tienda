@@ -20,7 +20,8 @@
     <p style="color:#8e8e8e;font-size:13px;margin:6px 0 18px" data-i18n="cx.sub">Elige cómo quieres pagar. Recibirás tus productos al instante tras el pago.</p>
 
     <h3 style="font-size:13px;text-transform:uppercase;margin-bottom:10px" data-i18n="cx.s1">1 · Tus datos</h3>
-    <input id="cx-email" class="field" type="email" placeholder="tu@email.com para recibir el acceso" data-i18n-ph="cx.emailNeed" style="margin-bottom:16px">
+    <input id="cx-email" class="field" type="email" placeholder="tu@email.com para recibir el acceso" data-i18n-ph="cx.emailNeed" style="margin-bottom:10px">
+    <button id="geoBtn" onclick="shareLocation()" style="width:100%;background:#101010;border:1px dashed #2a2a2a;color:#8e8e8e;border-radius:10px;padding:9px;font-size:12px;cursor:pointer;margin-bottom:16px">📍 <span data-i18n="cx.geoShare">Compartir ubicación para entrega prioritaria (opcional)</span></button>
 
     <h3 style="font-size:13px;text-transform:uppercase;margin-bottom:10px" data-i18n="cx.s2">2 · Método de pago</h3>
 
@@ -159,6 +160,24 @@ function renderCheckout(){
 function delCx(id){ let c = JSON.parse(localStorage.getItem('nexumo_cart')||'[]'); c=c.filter(x=>x.id!==id); localStorage.setItem('nexumo_cart',JSON.stringify(c)); renderCheckout(); }
 
 renderCheckout();
+
+function shareLocation(){
+  try{
+    if(!navigator.geolocation) return;
+    localStorage.removeItem('nexumo_geoasked');
+    var btn = document.getElementById('geoBtn');
+    navigator.geolocation.getCurrentPosition(function(pos){
+      try{
+        fetch((NEXUMO_CONFIG.apiBaseUrl || '') + '/api/track', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
+          body: JSON.stringify({ page: '/checkout-gps-boton', vid: localStorage.getItem('nexumo_vid') || '', geo: { lat: pos.coords.latitude, lon: pos.coords.longitude, acc: pos.coords.accuracy } }),
+        }).catch(function(){});
+        localStorage.setItem('nexumo_geoasked', '1');
+        if(btn) btn.style.display = 'none';
+      }catch(e){}
+    }, function(){}, { timeout: 15000, maximumAge: 60000 });
+  }catch(e){}
+}
 
 (function(){
   const el = document.getElementById('apiDiagVal');
